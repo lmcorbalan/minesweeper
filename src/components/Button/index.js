@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Button = props => {
-  console.log(props)
   const content = props.isGameStarted ? 'Reset' : 'Start';
 
   return (

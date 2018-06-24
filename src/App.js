@@ -48,7 +48,7 @@ class App extends Component {
     event.preventDefault();
     this.setState({
       isGameStarted: true,
-      gameState: Game.newGame()
+      gameState: Game.newGame(10,10,5)
     });
   }
 
@@ -56,7 +56,7 @@ class App extends Component {
     return (
       <div className="content">
         <Button
-          data={this.state.isGameStarted}
+          isGameStarted={this.state.isGameStarted}
           handleButtonClick={this.handleButtonClick}
         />
         {this.state.isGameStarted
