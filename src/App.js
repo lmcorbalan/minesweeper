@@ -6,13 +6,33 @@ import Board from './components/Board';
 
 import Game from './game';
 
-let gameState = Game.newGame();
-
 class App extends Component {
+  state = {
+    gameState: Game.newGame()
+  };
+
+  handleCellClick = event => {
+      event.preventDefault();
+      const col = event.target.dataset.col;
+      const row = event.target.dataset.row;
+
+      console.log(event.target)
+      console.log(row, col)
+
+      const gameState = Game.reveal(row, col);
+
+      this.setState({
+        gameState: gameState
+      });
+  }
+
   render() {
     return (
       <div className="content">
-        <Board data={gameState.board}/>
+        <Board
+          data={this.state.gameState.board}
+          handleCellClick={this.handleCellClick}
+        />
       </div>
     );
   }

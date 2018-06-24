@@ -1,27 +1,49 @@
 import Cell from './Cell';
 
-let boardState;
+let board;
 let boardRows;
 let boardCols;
+let mineCount;
+
+let boardState = {};
 
 export default {
   initialize(rows = 4, cols = 4, mines = 2) {
     // will initialize a board for the given rows cols and mines
-    boardState = [];
+    board = [];
     boardRows = rows;
     boardCols = cols;
+    mineCount = mines;
 
     for (let row = 0; row < rows; row++) {
-      boardState.push([]);
+      board.push([]);
 
       for (let col = 0; col < cols; col++) {
         const cell = Cell.create(col, row);
-        boardState[row].push(cell)
+        board[row].push(cell)
       }
     }
 
     setMines(mines);
     setCellsText();
+
+    // fixme - remove this line
+    // revealBoard();
+
+    boardState = {
+      isOver: false,
+      win: false,
+      board: board
+    };
+
+    return boardState;
+  },
+  reveal(row, col) {
+    const cell = board[row][col];
+
+    console.log(cell);
+
+    revealCell(cell, false);
 
     return boardState;
   }
@@ -36,8 +58,8 @@ function setMines(mines) {
     x = Math.floor((Math.random() * 1000) + 1) % boardCols;
     y = Math.floor((Math.random() * 1000) + 1) % boardRows;
 
-    if (!boardState[y][x].isMine) {
-      boardState[y][x].isMine = true;
+    if (!board[y][x].isMine) {
+      board[y][x].isMine = true;
       minesPlanted++;
     }
   }
@@ -46,7 +68,7 @@ function setMines(mines) {
 function setCellsText() {
   for (let row = 0; row < boardRows; row++) {
     for (var col = 0; col < boardCols; col++) {
-      const cell = boardState[row][col];
+      const cell = board[row][col];
       if (!cell.isMine) {
         const mines = neighbors(cell).filter(neighbor => neighbor.isMine);
         cell.minesArround = mines.length
@@ -55,51 +77,109 @@ function setCellsText() {
   }
 }
 
-
 function neighbors(cell) {
   let result = [];
 
   // up
   if (cell.y > 0) {
-    result.push(boardState[cell.y - 1][cell.x]);
+    result.push(board[cell.y - 1][cell.x]);
   }
   // down
   if (cell.y < boardRows - 1) {
-    result.push(boardState[cell.y + 1][cell.x]);
+    result.push(board[cell.y + 1][cell.x]);
   }
 
   // left
   if (cell.x > 0) {
-      result.push(boardState[cell.y][cell.x - 1]);
+      result.push(board[cell.y][cell.x - 1]);
   }
 
   // right
   if (cell.x < boardCols - 1) {
-      result.push(boardState[cell.y][cell.x + 1]);
+      result.push(board[cell.y][cell.x + 1]);
   }
 
   // upper left
   if (cell.y > 0 && cell.x > 0)
   {
-      result.push(boardState[cell.y - 1][cell.x - 1]);
+      result.push(board[cell.y - 1][cell.x - 1]);
   }
 
   // lower left
   if (cell.y < boardRows - 1 && cell.x > 0) {
-      result.push(boardState[cell.y + 1][cell.x - 1]);
+      result.push(board[cell.y + 1][cell.x - 1]);
   }
 
   // upper right
   if (cell.y > 0 && cell.x < boardCols - 1)
   {
-      result.push(boardState[cell.y - 1][cell.x + 1]);
+      result.push(board[cell.y - 1][cell.x + 1]);
   }
 
   // lower right
   if (cell.y < boardRows - 1 && cell.x < boardCols - 1)
   {
-      result.push(boardState[cell.y + 1][cell.x + 1]);
+      result.push(board[cell.y + 1][cell.x + 1]);
   }
 
   return result;
 }
+
+function revealBoard() {
+  for (let row = 0; row < boardRows; row++) {
+    for (var col = 0; col < boardCols; col++) {
+      const cell = board[row][col];
+      cell.isRevealed = true;
+    }
+  }
+}
+
+function revealCell(cell, auto) {
+  // do not reveal flagged and revealed cell in auto mode
+  if (cell.isFlagged || (auto && cell.isRevealed)) { return; }
+
+  if (cell.isMine) {
+      boardState.isOve = true;
+      revealBoard();
+      return;
+  } else if (cell.isRevealed && !auto) {
+      const flaggedCells = neighbors(cell).filter(neighbor => neighbor.isFlagged);
+      if (cell.minesArround === flaggedCells.length) {
+          let hiddenCells = neighbors(cell).filter(neighbor => (!neighbor.isRevealed && !neighbor.isFlagged));
+          for (let hCell of hiddenCells) {
+            revealCell(hCell, true);
+          }
+      }
+  } else {
+      cell.isRevealed = true;
+      cell.isFlaged = false;
+
+      if (cell.minesArround !== 0) {
+          let cellNeighbors = neighbors(cell)
+          for (let neighbor of cellNeighbors) {
+            if (neighbor.isEmpty() || !neighbor.isMine) {
+                revealCell(neighbor, true);
+            }
+          }
+      }
+
+      if (isGameWon()) {
+          boardState.isOve = true;
+          boardState.win = true;
+          return;
+      }
+  }
+}
+
+function isGameWon() {
+  let revealedCount = 0;
+  for (let row = 0; row < boardRows; row++) {
+    for (var col = 0; col < boardCols; col++) {
+      const cell = board[row][col];
+      if (!cell.isRevealed) {
+        revealedCount++;
+      }
+    }
+  }
+  return revealedCount === mineCount;
+};

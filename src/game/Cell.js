@@ -7,7 +7,10 @@ export default {
       isMine: false,
       isFlaged: false,
       isRevealed: false,
-      minesArround: 0
+      minesArround: 0,
+      isEmpty() {
+        return this.minesArround === 0;
+      }
     };
   }
 }
