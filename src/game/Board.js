@@ -32,7 +32,7 @@ export default {
 
     boardState = {
       isOver: false,
-      win: false,
+      isWin: false,
       board: board
     };
 
@@ -41,9 +41,17 @@ export default {
   reveal(row, col) {
     const cell = board[row][col];
 
-    console.log(cell);
-
     revealCell(cell, false);
+
+    return boardState;
+  },
+
+  setFlag(row, col) {
+    const cell = board[row][col];
+    
+    if (!cell.isRevealed) {
+      cell.isFlaged = !cell.isFlaged;
+    }
 
     return boardState;
   }
@@ -139,7 +147,7 @@ function revealCell(cell, auto) {
   if (cell.isFlagged || (auto && cell.isRevealed)) { return; }
 
   if (cell.isMine) {
-      boardState.isOve = true;
+      boardState.isOver = true;
       revealBoard();
       return;
   } else if (cell.isRevealed && !auto) {
@@ -154,18 +162,17 @@ function revealCell(cell, auto) {
       cell.isRevealed = true;
       cell.isFlaged = false;
 
-      if (cell.minesArround !== 0) {
+      if (cell.isEmpty()) {
           let cellNeighbors = neighbors(cell)
           for (let neighbor of cellNeighbors) {
             if (neighbor.isEmpty() || !neighbor.isMine) {
-                revealCell(neighbor, true);
+              revealCell(neighbor, true);
             }
           }
       }
 
       if (isGameWon()) {
-          boardState.isOve = true;
-          boardState.win = true;
+          boardState.isWin = true;
           return;
       }
   }

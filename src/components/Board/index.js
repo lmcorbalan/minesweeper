@@ -10,6 +10,7 @@ const Board = (props) => {
           row={i}
           data={row}
           handleCellClick={props.handleCellClick}
+          handleContextMenu={props.handleContextMenu}
         />
       ))}
     </div>

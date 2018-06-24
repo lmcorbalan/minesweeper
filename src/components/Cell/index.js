@@ -28,6 +28,7 @@ const Cell = (props) => {
     <div
       className={classes.join(' ')}
       onClick={props.handleCellClick}
+      onContextMenu={props.handleContextMenu}
       data-row={row}
       data-col={col}
     >

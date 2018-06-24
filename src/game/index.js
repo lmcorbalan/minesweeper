@@ -12,5 +12,9 @@ export default {
 
   reveal(row, col) {
     return Board.reveal(row, col);
+  },
+
+  setFlag(row, col) {
+    return Board.setFlag(row, col);
   }
 }

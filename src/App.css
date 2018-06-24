@@ -1,6 +1,7 @@
 .content {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -27,4 +28,16 @@
 
 .cell--revealed {
   background-color: white;
+}
+
+.message {
+  padding: 5px;
+}
+
+.message--lose {
+  background-color: #e35454;
+}
+
+.message--win {
+  background-color: #bbeb54;
 }

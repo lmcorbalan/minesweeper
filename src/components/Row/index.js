@@ -9,6 +9,7 @@ const Row = (props) => {
           key={`cell-${props.row}-${i}`}
           data={cell}
           handleCellClick={props.handleCellClick}
+          handleContextMenu={props.handleContextMenu}
         />
       ))}
     </div>
