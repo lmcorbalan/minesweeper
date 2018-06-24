@@ -45,9 +45,16 @@ export default {
 
   setFlag(row, col) {
     const cell = board[row][col];
-
     if (!cell.isRevealed) {
-      cell.isFlagged = !cell.isFlagged;
+      if (!cell.isFlagged && !cell.isQuestion) {
+        cell.isFlagged = true;
+      } else if (cell.isFlagged) {
+        cell.isFlagged = false;
+        cell.isQuestion = true;
+      } else {
+        cell.isFlagged = false;
+        cell.isQuestion = false;
+      }
     }
 
     return boardState;
@@ -140,7 +147,6 @@ function revealBoard() {
 }
 
 function revealCell(cell, auto) {
-  // do not reveal flagged and revealed cell in auto mode
   if (cell.isFlagged || (auto && cell.isRevealed)) { return; }
 
   if (cell.isMine) {
@@ -152,7 +158,7 @@ function revealCell(cell, auto) {
       const flaggedCells = cellNeighbors.filter(neighbor => {
         return neighbor.isFlagged
       });
-      
+
       if (cell.minesArround === flaggedCells.length) {
           let hiddenCells = neighbors(cell).filter(neighbor => (!neighbor.isRevealed && !neighbor.isFlagged));
           for (let hCell of hiddenCells) {

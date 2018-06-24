@@ -15,6 +15,9 @@ const Cell = (props) => {
     if (props.data.isFlagged) {
       content = <i className="fas fa-flag" data-row={row} data-col={col} />
     }
+    if (props.data.isQuestion) {
+      content = <span data-row={row} data-col={col}>?</span>
+    }
   } else {
     if (props.data.isMine) {
       content = <i className="fas fa-bomb" data-row={row} data-col={col} />

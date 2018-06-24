@@ -6,6 +6,7 @@ export default {
       y: posY,
       isMine: false,
       isFlagged: false,
+      isQuestion: false,
       isRevealed: false,
       minesArround: 0,
       isEmpty() {

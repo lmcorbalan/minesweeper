@@ -4,16 +4,20 @@ import '@fortawesome/fontawesome-free/css/all.css'
 
 import Board from './components/Board';
 import Message from './components/Message';
+import Button from './components/Button';
 
 import Game from './game';
 
 class App extends Component {
   state = {
-    gameState: Game.newGame()
+    isGameStarted: false
   };
 
   handleContextMenu = event => {
     event.preventDefault();
+    if (this.state.gameState.isOver || this.state.gameState.isWin) {
+      return;
+    }
     const col = event.target.dataset.col;
     const row = event.target.dataset.row;
 
@@ -40,15 +44,32 @@ class App extends Component {
       });
   }
 
+  handleButtonClick = event => {
+    event.preventDefault();
+    this.setState({
+      isGameStarted: true,
+      gameState: Game.newGame()
+    });
+  }
+
   render() {
     return (
       <div className="content">
-        <Message data={this.state.gameState}/>
-        <Board
-          data={this.state.gameState.board}
-          handleCellClick={this.handleCellClick}
-          handleContextMenu={this.handleContextMenu}
+        <Button
+          data={this.state.isGameStarted}
+          handleButtonClick={this.handleButtonClick}
         />
+        {this.state.isGameStarted
+          ? <React.Fragment>
+            <Message data={this.state.gameState}/>
+            <Board
+              data={this.state.gameState.board}
+              handleCellClick={this.handleCellClick}
+              handleContextMenu={this.handleContextMenu}
+            />
+          </React.Fragment>
+          : ''
+        }
       </div>
     );
   }
