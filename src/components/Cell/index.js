@@ -12,7 +12,7 @@ const Cell = (props) => {
   let content = '';
 
   if (!props.data.isRevealed) {
-    if (props.data.isFlaged) {
+    if (props.data.isFlagged) {
       content = <i className="fas fa-flag" data-row={row} data-col={col} />
     }
   } else {

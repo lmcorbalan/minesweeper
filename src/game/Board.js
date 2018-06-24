@@ -27,9 +27,6 @@ export default {
     setMines(mines);
     setCellsText();
 
-    // fixme - remove this line
-    // revealBoard();
-
     boardState = {
       isOver: false,
       isWin: false,
@@ -48,9 +45,9 @@ export default {
 
   setFlag(row, col) {
     const cell = board[row][col];
-    
+
     if (!cell.isRevealed) {
-      cell.isFlaged = !cell.isFlaged;
+      cell.isFlagged = !cell.isFlagged;
     }
 
     return boardState;
@@ -151,7 +148,11 @@ function revealCell(cell, auto) {
       revealBoard();
       return;
   } else if (cell.isRevealed && !auto) {
-      const flaggedCells = neighbors(cell).filter(neighbor => neighbor.isFlagged);
+      const cellNeighbors = neighbors(cell);
+      const flaggedCells = cellNeighbors.filter(neighbor => {
+        return neighbor.isFlagged
+      });
+      
       if (cell.minesArround === flaggedCells.length) {
           let hiddenCells = neighbors(cell).filter(neighbor => (!neighbor.isRevealed && !neighbor.isFlagged));
           for (let hCell of hiddenCells) {
@@ -160,7 +161,7 @@ function revealCell(cell, auto) {
       }
   } else {
       cell.isRevealed = true;
-      cell.isFlaged = false;
+      cell.isFlagged = false;
 
       if (cell.isEmpty()) {
           let cellNeighbors = neighbors(cell)

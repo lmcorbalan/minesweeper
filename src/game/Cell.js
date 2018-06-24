@@ -5,7 +5,7 @@ export default {
       x: posX,
       y: posY,
       isMine: false,
-      isFlaged: false,
+      isFlagged: false,
       isRevealed: false,
       minesArround: 0,
       isEmpty() {
