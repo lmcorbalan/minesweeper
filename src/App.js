@@ -6,71 +6,7 @@ import Board from './components/Board';
 
 import Game from './game';
 
-let gameState = {
-  isOver: false,
-  board: [
-    [
-      {
-        isMine: true,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      },
-      {
-        isMine: false,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      },
-      {
-        isMine: false,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      }
-    ],
-    [
-      {
-        isMine: true,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      },
-      {
-        isMine: false,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      },
-      {
-        isMine: false,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      }
-    ],
-    [
-      {
-        isMine: true,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      },
-      {
-        isMine: false,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      },
-      {
-        isMine: false,
-        isFlaged: false,
-        isRevealed: false,
-        text: ''
-      }
-    ]
-  ]
-};
+let gameState = Game.newGame();
 
 class App extends Component {
   render() {

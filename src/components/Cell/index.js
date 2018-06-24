@@ -6,19 +6,24 @@ const Cell = (props) => {
     props.data.isRevealed ? 'cell--revealed' : false
   ].map(c => c);
 
-  let icon = '';
+  let content = '';
+
+  // fixme - move inside condition
+  const text = props.data.minesArround ? props.data.minesArround : '';
+  content = <span>{text}</span>
+
   if (!props.data.isRevealed) {
     if (props.data.isMine) {
-      icon = <i className="fas fa-bomb" />
+      content = <i className="fas fa-bomb" />
     }
     if (props.data.isFlaged) {
-      icon = <i className="fas fa-flag" />
+      content = <i className="fas fa-flag" />
     }
   }
 
   return (
     <div className={classes.join(' ')}>
-      {icon}
+      {content}
     </div>
   );
 }
